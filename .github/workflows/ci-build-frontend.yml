@@ -76,5 +76,6 @@ jobs:
             --tag ${IMAGE}:latest \
             --label org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }} \
             --label org.opencontainers.image.revision=${{ github.sha }} \
+            --label "org.opencontainers.image.description=Planify – interface web (Next.js)" \
             --push \
             .
