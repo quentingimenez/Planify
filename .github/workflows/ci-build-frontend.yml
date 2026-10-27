@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   changes:
@@ -39,11 +40,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to DockerHub
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Enable Corepack and install Yarn 4.10.3
         run: |
@@ -62,10 +64,14 @@ jobs:
 
       - name: Build Frontend Docker image
         run: |
+          # GHCR exige un nom d'image en minuscules
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/planify_frontend"
           docker buildx build \
             --platform linux/amd64 \
             --file packages/frontend/Dockerfile \
-            --tag ${{ secrets.DOCKER_USERNAME }}/planify_frontend:${{ env.TIMESTAMP }}-v${{ env.VERSION }} \
-            --tag ${{ secrets.DOCKER_USERNAME }}/planify_frontend:latest \
+            --tag ${IMAGE}:${{ env.TIMESTAMP }}-v${{ env.VERSION }} \
+            --tag ${IMAGE}:latest \
+            --label org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }} \
+            --label org.opencontainers.image.revision=${{ github.sha }} \
             --push \
             .

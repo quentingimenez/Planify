@@ -60,7 +60,7 @@ Suivez ces étapes pour lancer l'application Planify.
 Ouvrez votre terminal et clonez le dépôt Git.
 
 ```bash
-git clone https://github.com/SuperKn4cky/Planify.git
+git clone https://github.com/quentingimenez/Planify.git
 cd Planify
 ```
 
