@@ -67,7 +67,7 @@ services:
       - "traefik.http.services.error-svc.loadbalancer.server.port=65535"
 
   front:
-    image: superknacky/planify_frontend:latest
+    image: ghcr.io/quentingimenez/planify_frontend:latest
     container_name: Planify-front
     expose:
       - "3000"
@@ -87,7 +87,7 @@ services:
       - "traefik.http.routers.front.middlewares=secure-headers,csp,ratelimit"
 
   back:
-    image: superknacky/planify_backend:latest
+    image: ghcr.io/quentingimenez/planify_backend:latest
     container_name: Planify-back
     expose:
       - "4000"

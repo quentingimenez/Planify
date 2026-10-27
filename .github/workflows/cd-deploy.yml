@@ -5,6 +5,10 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -58,7 +62,10 @@ jobs:
             ACMEEMAIL=${{ secrets.ACMEEMAIL }}
             EOF
 
+            # Le GITHUB_TOKEN expire à la fin du job : on se déconnecte juste après le pull
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
             docker compose pull
+            docker logout ghcr.io
             docker compose up -d --remove-orphans
 
             chmod +x scripts/backup_planify.sh
